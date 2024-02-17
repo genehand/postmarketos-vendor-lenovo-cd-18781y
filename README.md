@@ -11,15 +11,25 @@
 | wifi/board.bin           | /modem/image/bdwlan30.bin                           | /lib/firmware/ath10k/QCA9379/hw1.0/board.bin           |
 | wifi/firmware-sdio-5.bin | /modem/image/otp30.bin<br> /modem/image/qwlan30.bin | /lib/firmware/ath10k/QCA9379/hw1.0/firmware-sdio-5.bin |
 
+## Firmware Versions
+
+| Firmware | Version                            |
+| -------- | ---------------------------------- |
+| bt       | BTFM.NPL.1.0.4-00002-QCABTFMSWPZ-1 |
+| wifi     | WLAN.NPL.1.6-00163-QCANPLSWPZ-1    |
+
 ## Building the WiFi Firmware
 
 1. Clone https://github.com/qca/qca-swiss-army-knife
 2. Get `/modem/image/otp30.bin` and `/modem/image/qwlan30.bin` from stock image
    or device
-3. From `qca-swiss-army-knife/tools/scripts/ath10k` use `ath10k-fwencoder` like
-   this:
+3. From `qca-swiss-army-knife/tools/scripts/ath10k` use `ath10k-fwencoder`. As
+   the `firmware-version` use the version string of the WLAN package from the
+   BSP that was used to create the firmware. This info can be found on the
+   device in the file `/modem/verinfo/ver_info.txt`.
    ```bash
    ./ath10k-fwencoder --create \
+       --firmware-version="WLAN.NPL.1.6-00163-QCANPLSWPZ-1"
        --otp=otp30.bin \
        --firmware=qwlan30.bin \
        --set-wmi-op-version=tlv \
@@ -30,7 +40,7 @@
 4. This should result in a `firmware-5.bin` output file which can be renamed to
    `firmware-sdio-5.bin`
 
-# Checksums (SHA256)
+## Checksums (SHA256)
 
 ```
 4e36326d644ada724b5bb3358e5b8d867fece729f645caa46bf9f051db06c19e  bt/nvm_00150100.bin
@@ -40,5 +50,5 @@ fe8dead286927c662da0769589c739f914c130271429701606bd7662e91930fd  gpu/a506_zap.b
 ed2c860ae56c5061d630b40cbe0aae6b0c4c4d0422b91b838973fbee66a3b00e  gpu/a530_pfp.fw
 6419f35956ec7307af83723fedfba752520bacd8389eda0d0120e185e4cb1d3f  gpu/a530_pm4.fw
 65767cca6a1ff88a9899235acdeeed1e9447a2f16f41d38052202835d5bda7d4  wifi/board.bin
-04929953d36f755094c2d783bfd0d10a3e42a206160c243f1ef58175bf17fd59  wifi/firmware-sdio-5.bin
+3f41205eb315dc41f0217bb41f0c97977959fcd55439cd194b704f77824a534f  wifi/firmware-sdio-5.bin
 ```
